@@ -36,8 +36,6 @@ git checkout v1.2.3
 
 Jak Wprowadzać Zmiany (Dla Deweloperów)
 
-BARDZO WAŻNE:
-
 Nigdy nie commituj bezpośrednio do gałęzi main.
 Wszelkie zmiany w tej gałęzi pochodzą z gałęzi develop (lub w wyjątkowych sytuacjach z gałęzi hotfix) po zakończeniu cyklu rozwoju, recenzji kodu (Code Review) i pomyślnym przejściu testów.
 
