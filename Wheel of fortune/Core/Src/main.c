@@ -209,6 +209,46 @@ void Error_Handler(void);
 #define SECTOR_COUNT 8
 /* USER CODE END Private defines */
 
+const uint16_t sectorColors[SECTOR_COUNT] = {
+    LCD_COLOR_RED, LCD_COLOR_GREEN, LCD_COLOR_BLUE, LCD_COLOR_CYAN,
+    LCD_COLOR_MAGENTA, LCD_COLOR_YELLOW, LCD_COLOR_ORANGE, LCD_COLOR_LIGHTBLUE
+};
+const uint16_t sectorHighlight[SECTOR_COUNT] = {
+    LCD_COLOR_LIGHTRED, LCD_COLOR_LIGHTGREEN, LCD_COLOR_LIGHTBLUE, LCD_COLOR_LIGHTCYAN,
+    LCD_COLOR_LIGHTMAGENTA, LCD_COLOR_LIGHTYELLOW, LCD_COLOR_YELLOW, LCD_COLOR_WHITE
+};
+
+int centerX, centerY, radius;
+
+/* Draws one sector of the wheel of fortune */
+void drawSector(int idx, uint16_t color) {
+    const int steps = 12;
+    float angleStart = idx * (360.0f / SECTOR_COUNT);
+    float angleEnd = (idx + 1) * (360.0f / SECTOR_COUNT);
+
+    Point pts[steps + 2];
+
+    pts[0].X = centerX;
+    pts[0].Y = centerY;
+
+    for (int i = 0; i <= steps; i++) {
+        float angle = angleStart + (angleEnd - angleStart) * i / steps;
+        float rad = angle * 3.14159f / 180.0f;
+        pts[i + 1].X = centerX + (int)(radius * cosf(rad));
+        pts[i + 1].Y = centerY + (int)(radius * sinf(rad));
+    }
+
+    BSP_LCD_SetTextColor(color);
+    BSP_LCD_DrawPolygon(pts, steps + 2);
+}
+
+/* Draws a full wheel of fortune */
+void drawWheel(void) {
+    for (int i = 0; i < SECTOR_COUNT; i++) {
+        drawSector(i, sectorColors[i]);
+    }
+}
+
 /* System clock configuration */
 void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -250,6 +290,12 @@ int main(void) {
     BSP_IO_Init();
     BSP_LCD_Clear(LCD_COLOR_BLACK);
     BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
+
+    centerX = BSP_LCD_GetXSize() / 2;
+    centerY = BSP_LCD_GetYSize() / 2;
+    radius = (centerX < centerY ? centerX : centerY) - 20;
+
+    drawWheel();
 
     while (1) {
     }
