@@ -1,10 +1,10 @@
 //* USER CODE BEGIN Header */
 /**
-  ****************************************************************************
+  **************************************************************************
   * @file           : main.h
   * @brief          : Header for main.c file.
   *                   This file contains the common defines of the application.
-  ****************************************************************************
+  **************************************************************************
   * @attention
   *
   * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
@@ -13,9 +13,9 @@
   * This software component is licensed by ST under Ultimate Liberty license
   * SLA0044, the "License"; You may not use this file except in compliance with
   * the License. You may obtain a copy of the License at:
-  *                             [www.st.com/SLA0044](https://www.st.com/SLA0044)
+  *                             www.st.com/SLA0044
   *
-  ****************************************************************************
+  **************************************************************************
   */
 /* USER CODE END Header */
 
@@ -209,6 +209,67 @@ void Error_Handler(void);
 #define SECTOR_COUNT 8
 /* USER CODE END Private defines */
 
+const uint16_t sectorColors[SECTOR_COUNT] = {
+    LCD_COLOR_RED, LCD_COLOR_GREEN, LCD_COLOR_BLUE, LCD_COLOR_CYAN,
+    LCD_COLOR_MAGENTA, LCD_COLOR_YELLOW, LCD_COLOR_ORANGE, LCD_COLOR_LIGHTBLUE
+};
+const uint16_t sectorHighlight[SECTOR_COUNT] = {
+    LCD_COLOR_LIGHTRED, LCD_COLOR_LIGHTGREEN, LCD_COLOR_LIGHTBLUE, LCD_COLOR_LIGHTCYAN,
+    LCD_COLOR_LIGHTMAGENTA, LCD_COLOR_LIGHTYELLOW, LCD_COLOR_YELLOW, LCD_COLOR_WHITE
+};
+
+int centerX, centerY, radius;
+
+/* Draws one sector of the wheel of fortune */
+void drawSector(int idx, uint16_t color) {
+    const int steps = 12;
+    float angleStart = idx * (360.0f / SECTOR_COUNT);
+    float angleEnd = (idx + 1) * (360.0f / SECTOR_COUNT);
+
+    Point pts[steps + 2];
+
+    pts[0].X = centerX;
+    pts[0].Y = centerY;
+
+    for (int i = 0; i <= steps; i++) {
+        float angle = angleStart + (angleEnd - angleStart) * i / steps;
+        float rad = angle * 3.14159f / 180.0f;
+        pts[i + 1].X = centerX + (int)(radius * cosf(rad));
+        pts[i + 1].Y = centerY + (int)(radius * sinf(rad));
+    }
+
+    BSP_LCD_SetTextColor(color);
+    BSP_LCD_DrawPolygon(pts, steps + 2);
+}
+
+/* Draws a full wheel of fortune */
+void drawWheel(void) {
+    for (int i = 0; i < SECTOR_COUNT; i++) {
+        drawSector(i, sectorColors[i]);
+    }
+}
+
+/* Spin animation */
+void spinWheel(void) {
+    int totalSteps = 40 + (rand() % 40);
+    int prev = -1;
+    int delay = 50;
+
+    for (int step = 0; step < totalSteps; step++) {
+        int idx = step % SECTOR_COUNT;
+
+        if (prev >= 0) {
+            drawSector(prev, sectorColors[prev]);
+        }
+
+        drawSector(idx, sectorHighlight[idx]);
+        HAL_Delay(delay);
+        if (delay < 500) delay += 5;
+        prev = idx;
+    }
+}
+
+
 /* System clock configuration */
 void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -231,14 +292,22 @@ void SystemClock_Config(void) {
     HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
 }
 
-void Error_Handler(void) {
-/* USER CODE BEGIN Error_Handler_Debug */
-// BSP_LED_On(LED_RED);
-/* User can add his own implementation to report the HAL error return state */
-__disable_irq();
-while (1) {
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if (BSP_JOY_GetState() == JOY_SEL)
+    {
+        spinWheel();
+    }
 }
-/* USER CODE END Error_Handler_Debug */
+
+void Error_Handler(void) {
+	/* USER CODE BEGIN Error_Handler_Debug */
+	// BSP_LED_On(LED_RED);
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
+	/* USER CODE END Error_Handler_Debug */
 }
 
 /* Main function */
@@ -251,7 +320,22 @@ int main(void) {
     BSP_LCD_Clear(LCD_COLOR_BLACK);
     BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
 
+    centerX = BSP_LCD_GetXSize() / 2;
+    centerY = BSP_LCD_GetYSize() / 2;
+    radius = (centerX < centerY ? centerX : centerY) - 20;
+
+    drawWheel();
+
+    BSP_JOY_Init(JOY_MODE_GPIO);
+
+    srand(HAL_GetTick());
+
     while (1) {
+    	JOYState_TypeDef state = BSP_JOY_GetState();
+    	if (state == JOY_SEL) {
+    	    spinWheel();
+    	    HAL_Delay(200);
+    	}
     }
 }
 
