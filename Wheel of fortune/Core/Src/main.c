@@ -209,6 +209,17 @@ void Error_Handler(void);
 #define SECTOR_COUNT 8
 /* USER CODE END Private defines */
 
+const uint16_t sectorColors[SECTOR_COUNT] = {
+    LCD_COLOR_RED, LCD_COLOR_GREEN, LCD_COLOR_BLUE, LCD_COLOR_CYAN,
+    LCD_COLOR_MAGENTA, LCD_COLOR_YELLOW, LCD_COLOR_ORANGE, LCD_COLOR_LIGHTBLUE
+};
+const uint16_t sectorHighlight[SECTOR_COUNT] = {
+    LCD_COLOR_LIGHTRED, LCD_COLOR_LIGHTGREEN, LCD_COLOR_LIGHTBLUE, LCD_COLOR_LIGHTCYAN,
+    LCD_COLOR_LIGHTMAGENTA, LCD_COLOR_LIGHTYELLOW, LCD_COLOR_YELLOW, LCD_COLOR_WHITE
+};
+
+int centerX, centerY, radius;
+
 /* System clock configuration */
 void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -250,6 +261,10 @@ int main(void) {
     BSP_IO_Init();
     BSP_LCD_Clear(LCD_COLOR_BLACK);
     BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
+
+    centerX = BSP_LCD_GetXSize() / 2;
+    centerY = BSP_LCD_GetYSize() / 2;
+    radius = (centerX < centerY ? centerX : centerY) - 20;
 
     while (1) {
     }
