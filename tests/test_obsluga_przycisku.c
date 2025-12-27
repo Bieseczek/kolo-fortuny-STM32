@@ -1,1 +1,0 @@
-// testy dla obslugi przycisku
