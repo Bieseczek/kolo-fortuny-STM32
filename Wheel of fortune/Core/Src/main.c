@@ -220,35 +220,6 @@ const uint16_t sectorHighlight[SECTOR_COUNT] = {
 
 int centerX, centerY, radius;
 
-/* Draws one sector of the wheel of fortune */
-void drawSector(int idx, uint16_t color) {
-    const int steps = 12;
-    float angleStart = idx * (360.0f / SECTOR_COUNT);
-    float angleEnd = (idx + 1) * (360.0f / SECTOR_COUNT);
-
-    Point pts[steps + 2];
-
-    pts[0].X = centerX;
-    pts[0].Y = centerY;
-
-    for (int i = 0; i <= steps; i++) {
-        float angle = angleStart + (angleEnd - angleStart) * i / steps;
-        float rad = angle * 3.14159f / 180.0f;
-        pts[i + 1].X = centerX + (int)(radius * cosf(rad));
-        pts[i + 1].Y = centerY + (int)(radius * sinf(rad));
-    }
-
-    BSP_LCD_SetTextColor(color);
-    BSP_LCD_DrawPolygon(pts, steps + 2);
-}
-
-/* Draws a full wheel of fortune */
-void drawWheel(void) {
-    for (int i = 0; i < SECTOR_COUNT; i++) {
-        drawSector(i, sectorColors[i]);
-    }
-}
-
 /* System clock configuration */
 void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -302,8 +273,6 @@ int main(void) {
     centerX = BSP_LCD_GetXSize() / 2;
     centerY = BSP_LCD_GetYSize() / 2;
     radius = (centerX < centerY ? centerX : centerY) - 20;
-
-    drawWheel();
 
     while (1) {
     	JOYState_TypeDef state = BSP_JOY_GetState();
