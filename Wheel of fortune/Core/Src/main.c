@@ -1,10 +1,10 @@
 //* USER CODE BEGIN Header */
 /**
-  **************************************************************************
+  ****************************************************************************
   * @file           : main.h
   * @brief          : Header for main.c file.
   *                   This file contains the common defines of the application.
-  **************************************************************************
+  ****************************************************************************
   * @attention
   *
   * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
@@ -13,9 +13,9 @@
   * This software component is licensed by ST under Ultimate Liberty license
   * SLA0044, the "License"; You may not use this file except in compliance with
   * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  *                             [www.st.com/SLA0044](https://www.st.com/SLA0044)
   *
-  **************************************************************************
+  ****************************************************************************
   */
 /* USER CODE END Header */
 
@@ -242,22 +242,14 @@ void SystemClock_Config(void) {
     HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-    if (BSP_JOY_GetState() == JOY_SEL)
-    {
-        spinWheel();
-    }
-}
-
 void Error_Handler(void) {
-	/* USER CODE BEGIN Error_Handler_Debug */
-	// BSP_LED_On(LED_RED);
-	/* User can add his own implementation to report the HAL error return state */
-	__disable_irq();
-	while (1) {
-	}
-	/* USER CODE END Error_Handler_Debug */
+/* USER CODE BEGIN Error_Handler_Debug */
+// BSP_LED_On(LED_RED);
+/* User can add his own implementation to report the HAL error return state */
+__disable_irq();
+while (1) {
+}
+/* USER CODE END Error_Handler_Debug */
 }
 
 /* Main function */
@@ -275,11 +267,6 @@ int main(void) {
     radius = (centerX < centerY ? centerX : centerY) - 20;
 
     while (1) {
-    	JOYState_TypeDef state = BSP_JOY_GetState();
-    	if (state == JOY_SEL) {
-    	    spinWheel();
-    	    HAL_Delay(200);
-    	}
     }
 }
 
