@@ -16,6 +16,7 @@ void Test_Joystick_Initial_State(void) {
     // Pobranie stanu - po restarcie powinien być JOY_NONE
     if (BSP_JOY_GetState() != JOY_NONE) {
         // Jeśli stan jest inny, piny mogą być źle skonfigurowane (brak pull-up/down)
+        Error_Handler();
     }
 }
 
