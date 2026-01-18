@@ -272,6 +272,56 @@ void spinWheel(void) {
 }
 
 
+/* Draws one sector of the wheel of fortune */
+void drawSector(int idx, uint16_t color) {
+    const int steps = 12;
+    float angleStart = idx * (360.0f / SECTOR_COUNT);
+    float angleEnd = (idx + 1) * (360.0f / SECTOR_COUNT);
+
+    Point pts[steps + 2];
+
+    pts[0].X = centerX;
+    pts[0].Y = centerY;
+
+    for (int i = 0; i <= steps; i++) {
+        float angle = angleStart + (angleEnd - angleStart) * i / steps;
+        float rad = angle * 3.14159f / 180.0f;
+        pts[i + 1].X = centerX + (int)(radius * cosf(rad));
+        pts[i + 1].Y = centerY + (int)(radius * sinf(rad));
+    }
+
+    BSP_LCD_SetTextColor(color);
+    BSP_LCD_DrawPolygon(pts, steps + 2);
+}
+
+/* Draws a full wheel of fortune */
+void drawWheel(void) {
+    for (int i = 0; i < SECTOR_COUNT; i++) {
+        drawSector(i, sectorColors[i]);
+    }
+}
+
+/* Spin animation */
+void spinWheel(void) {
+    int totalSteps = 40 + (rand() % 40);
+    int prev = -1;
+    int delay = 50;
+
+    for (int step = 0; step < totalSteps; step++) {
+        int idx = step % SECTOR_COUNT;
+
+        if (prev >= 0) {
+            drawSector(prev, sectorColors[prev]);
+        }
+
+        drawSector(idx, sectorHighlight[idx]);
+        HAL_Delay(delay);
+        if (delay < 500) delay += 5;
+        prev = idx;
+    }
+}
+
+
 /* System clock configuration */
 void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
