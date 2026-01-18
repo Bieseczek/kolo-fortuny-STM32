@@ -1,10 +1,18 @@
 //* USER CODE BEGIN Header */
 /**
+<<<<<<< HEAD
   **************************************************************************
   * @file           : main.h
   * @brief          : Header for main.c file.
   *                   This file contains the common defines of the application.
   **************************************************************************
+=======
+  ****************************************************************************
+  * @file           : main.h
+  * @brief          : Header for main.c file.
+  *                   This file contains the common defines of the application.
+  ****************************************************************************
+>>>>>>> parent of 6d6e09b (Revert "Feature/model kola")
   * @attention
   *
   * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
@@ -13,9 +21,15 @@
   * This software component is licensed by ST under Ultimate Liberty license
   * SLA0044, the "License"; You may not use this file except in compliance with
   * the License. You may obtain a copy of the License at:
+<<<<<<< HEAD
   *                             www.st.com/SLA0044
   *
   **************************************************************************
+=======
+  *                             [www.st.com/SLA0044](https://www.st.com/SLA0044)
+  *
+  ****************************************************************************
+>>>>>>> parent of 6d6e09b (Revert "Feature/model kola")
   */
 /* USER CODE END Header */
 
@@ -68,7 +82,10 @@ extern const unsigned char stlogo[];
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
+<<<<<<< HEAD
 static void fillSectorScanline(int idx, uint16_t fillColor);
+=======
+>>>>>>> parent of 6d6e09b (Revert "Feature/model kola")
 
 /* USER CODE BEGIN EFP */
 void LCD_demo (void);
@@ -204,13 +221,20 @@ void Error_Handler(void);
 #define USB_OverCurrent_Pin GPIO_PIN_1
 #define USB_OverCurrent_GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
+<<<<<<< HEAD
 #define PAUSE_STATUS     ((uint32_t)0x00)
 #define RESUME_STATUS    ((uint32_t)0x01)
 #define IDLE_STATUS      ((uint32_t)0x02)
+=======
+#define PAUSE_STATUS     ((uint32_t)0x00) /* Audio Player in Pause Status */
+#define RESUME_STATUS    ((uint32_t)0x01) /* Audio Player in Resume Status */
+#define IDLE_STATUS      ((uint32_t)0x02) /* Audio Player in Idle Status */
+>>>>>>> parent of 6d6e09b (Revert "Feature/model kola")
 #define SECTOR_COUNT 8
 /* USER CODE END Private defines */
 
 const uint16_t sectorColors[SECTOR_COUNT] = {
+<<<<<<< HEAD
 	0xEC1D, 0x03E0, LCD_COLOR_GREEN, LCD_COLOR_BLUE, LCD_COLOR_CYAN,
     LCD_COLOR_MAGENTA, LCD_COLOR_YELLOW, LCD_COLOR_WHITE
 };
@@ -321,6 +345,17 @@ void spinWheel(void) {
     }
 }
 
+=======
+    LCD_COLOR_RED, LCD_COLOR_GREEN, LCD_COLOR_BLUE, LCD_COLOR_CYAN,
+    LCD_COLOR_MAGENTA, LCD_COLOR_YELLOW, LCD_COLOR_ORANGE, LCD_COLOR_LIGHTBLUE
+};
+const uint16_t sectorHighlight[SECTOR_COUNT] = {
+    LCD_COLOR_LIGHTRED, LCD_COLOR_LIGHTGREEN, LCD_COLOR_LIGHTBLUE, LCD_COLOR_LIGHTCYAN,
+    LCD_COLOR_LIGHTMAGENTA, LCD_COLOR_LIGHTYELLOW, LCD_COLOR_YELLOW, LCD_COLOR_WHITE
+};
+
+int centerX, centerY, radius;
+>>>>>>> parent of 6d6e09b (Revert "Feature/model kola")
 
 /* System clock configuration */
 void SystemClock_Config(void) {
@@ -345,6 +380,7 @@ void SystemClock_Config(void) {
 }
 
 void Error_Handler(void) {
+<<<<<<< HEAD
 	/* USER CODE BEGIN Error_Handler_Debug */
 	__disable_irq();
 	while (1) {
@@ -423,6 +459,15 @@ static void fillSectorScanline(int idx, uint16_t fillColor)
             BSP_LCD_DrawHLine(xL, y, (uint16_t)(xR - xL + 1));
         }
     }
+=======
+/* USER CODE BEGIN Error_Handler_Debug */
+// BSP_LED_On(LED_RED);
+/* User can add his own implementation to report the HAL error return state */
+__disable_irq();
+while (1) {
+}
+/* USER CODE END Error_Handler_Debug */
+>>>>>>> parent of 6d6e09b (Revert "Feature/model kola")
 }
 
 /* Main function */
@@ -439,6 +484,7 @@ int main(void) {
     centerY = BSP_LCD_GetYSize() / 2;
     radius = (centerX < centerY ? centerX : centerY) - 20;
 
+<<<<<<< HEAD
     drawWheel();
 
     BSP_JOY_Init(JOY_MODE_GPIO);
@@ -451,6 +497,9 @@ int main(void) {
     	    spinWheel();
     	    HAL_Delay(200);
     	}
+=======
+    while (1) {
+>>>>>>> parent of 6d6e09b (Revert "Feature/model kola")
     }
 }
 
