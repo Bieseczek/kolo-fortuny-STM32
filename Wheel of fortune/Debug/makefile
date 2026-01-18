@@ -76,8 +76,13 @@ all: main-build
 main-build: Kolo_fortuny.elf secondary-outputs
 
 # Tool invocations
+<<<<<<< HEAD
 Kolo_fortuny.elf Kolo_fortuny.map: $(OBJS) $(USER_OBJS) C:\Users\Michał\Documents\Studia\Magisterskie\2semestr\Systemy\ Wbudowane\ 2\Kolo_fortuny\STM32F107VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-gcc -o "Kolo_fortuny.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Michał\Documents\Studia\Magisterskie\2semestr\Systemy Wbudowane 2\Kolo_fortuny\STM32F107VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Kolo_fortuny.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+=======
+Kolo_fortuny.elf Kolo_fortuny.map: $(OBJS) $(USER_OBJS) C:\Users\Michał\Documents\Studia\Magisterskie\2semestr\Efektywne\ metody\ prowadzenia\ projektu\ programistycznego\Koło\ fortuny\1Konfiguracja\ środowiska\Efektywne\STM32F107VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Kolo_fortuny.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Michał\Documents\Studia\Magisterskie\2semestr\Efektywne metody prowadzenia projektu programistycznego\Koło fortuny\1Konfiguracja środowiska\Efektywne\STM32F107VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Kolo_fortuny.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+>>>>>>> parent of 6d6e09b (Revert "Feature/model kola")
 	@echo 'Finished building target: $@'
 	@echo ' '
 
